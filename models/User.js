@@ -2,10 +2,31 @@ const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema(
   {
-    username: {},
-    email: {},
-    thoughts: [{}],
-    friends: [{}],
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      //ALWAYS EXCITED TO WORK WITH REGEX!!!!!!!!!!!!!!!!!
+      match: [/.+@.+\..+/, "Must match an email address!"],
+    },
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Thought",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Thought",
+      },
+    ],
   },
   {
     //honestly very confused about virtuals,
