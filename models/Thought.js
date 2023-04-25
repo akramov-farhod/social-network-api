@@ -7,8 +7,8 @@ const thoughtSchema = new Schema(
     thoughtText: {
       type: String,
       required: "Type in at least 1 character, please.",
-      minLength: 1,
-      maxLength: 300,
+      minlength: 1,
+      maxlength: 300,
     },
     createdAt: {
       type: Date,
