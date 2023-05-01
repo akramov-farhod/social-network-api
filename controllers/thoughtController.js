@@ -16,7 +16,7 @@ const thoughtController = {
   async getSingleThought(req, res) {
     try {
       const dbThoughtData = await Thought.findOne({
-        _id: req.params.thoughtId,
+        _id: `${req.params.thoughtId}`,
       });
 
       if (!dbThoughtData) {
@@ -24,9 +24,9 @@ const thoughtController = {
       }
 
       res.json(dbThoughtData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
   // create a thought
@@ -35,7 +35,7 @@ const thoughtController = {
       const dbThoughtData = await Thought.create(req.body);
 
       const dbUserData = await User.findOneAndUpdate(
-        { _id: req.body.userId },
+        { username: req.body.username },
         { $push: { thoughts: dbThoughtData._id } },
         { new: true }
       );
@@ -47,27 +47,29 @@ const thoughtController = {
       }
 
       res.json({ message: "Thought successfully created!" });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
   // update thought
   async updateThought(req, res) {
-    const dbThoughtData = await Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $set: req.body },
-      { runValidators: true, new: true }
-    );
+    try {
+      const dbThoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
 
-    if (!dbThoughtData) {
-      return res.status(404).json({ message: "No users match this ID" });
+      if (!dbThoughtData) {
+        return res.status(404).json({ message: "No users match this ID" });
+      }
+
+      res.json(dbThoughtData);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
-
-    res.json(dbThoughtData);
-
-    console.log(err);
-    res.status(500).json(err);
   },
   // delete thought
   async deleteThought(req, res) {
@@ -94,9 +96,9 @@ const thoughtController = {
       }
 
       res.json({ message: "Thought successfully deleted!" });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 
@@ -114,9 +116,9 @@ const thoughtController = {
       }
 
       res.json(dbThoughtData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
   // remove reaction from a thought
@@ -133,9 +135,9 @@ const thoughtController = {
       }
 
       res.json(dbThoughtData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 };

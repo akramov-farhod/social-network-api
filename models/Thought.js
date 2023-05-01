@@ -10,14 +10,14 @@ const thoughtSchema = new Schema(
       minlength: 1,
       maxlength: 300,
     },
+    username: {
+      type: String,
+      required: true,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
       get: (timestamp) => dateFormat(timestamp),
-    },
-    username: {
-      type: String,
-      required: true,
     },
     reactions: [reactionSchema],
   },
@@ -29,7 +29,7 @@ const thoughtSchema = new Schema(
   }
 );
 
-thoughtSchema.virtual("reactionCount").get(() => {
+thoughtSchema.virtual("reactionCount").get(function () {
   return this.reactions.length;
 });
 
