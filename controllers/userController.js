@@ -1,7 +1,7 @@
 const { User, Thought } = require("../models");
 
 const userController = {
-  // get all users
+  // GET ALL USERS
   async getUsers(req, res) {
     try {
       const dbUserData = await User.find().select("-__v");
@@ -12,7 +12,7 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  // get single user by id
+  // GET USER BY ID
   async getSingleUser(req, res) {
     try {
       const dbUserData = await User.findOne({ _id: req.params.userId })
@@ -30,7 +30,7 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  // create a new user
+  // CREATE USER
   async createUser(req, res) {
     try {
       const dbUserData = await User.create(req.body);
@@ -40,7 +40,7 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  // update a user
+  // UPDATE USER
   async updateUser(req, res) {
     try {
       const dbUserData = await User.findOneAndUpdate(
@@ -64,7 +64,7 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  // delete user (BONUS: and delete associated thoughts)
+  // DELETE USER
   async deleteUser(req, res) {
     try {
       const dbUserData = await User.findOneAndDelete({
@@ -75,7 +75,6 @@ const userController = {
         return res.status(404).json({ message: "No users match this ID" });
       }
 
-      // BONUS: get ids of user's `thoughts` and delete them all
       await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
       res.json({
         message: "User and All Their Thoughts Successfully Deleted!",
@@ -86,8 +85,10 @@ const userController = {
     }
   },
 
-  // add friend to friend list
+  // ADD FRIEND TO FRIENDS ARRAY
   async addFriend(req, res) {
+    console.log("req.params !!!!!!!!!!");
+    console.log(req.params);
     try {
       const dbUserData = await User.findOneAndUpdate(
         { _id: req.params.userId },
@@ -105,7 +106,7 @@ const userController = {
       res.status(500).json(error);
     }
   },
-  // remove friend from friend list
+  // REMOVE FRIEND FROM RESPECTIVE FRIENDS ARRAY
   async removeFriend(req, res) {
     try {
       const dbUserData = await User.findOneAndUpdate(

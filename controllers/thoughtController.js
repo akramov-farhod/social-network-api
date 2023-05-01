@@ -1,7 +1,7 @@
 const { Thought, User } = require("../models");
 
 const thoughtController = {
-  // get all thoughts
+  // GET ALL THOUGHTS
   async getThoughts(req, res) {
     try {
       const dbThoughtData = await Thought.find().sort({ createdAt: -1 });
@@ -12,7 +12,7 @@ const thoughtController = {
       res.status(500).json(err);
     }
   },
-  // get single thought by id
+  // GET THOUGHT BY ID
   async getSingleThought(req, res) {
     try {
       const dbThoughtData = await Thought.findOne({
@@ -29,7 +29,7 @@ const thoughtController = {
       res.status(500).json(error);
     }
   },
-  // create a thought
+  // CREATE THOUGHT
   async createThought(req, res) {
     try {
       const dbThoughtData = await Thought.create(req.body);
@@ -52,7 +52,7 @@ const thoughtController = {
       res.status(500).json(error);
     }
   },
-  // update thought
+  // UPDATE THOUGHT
   async updateThought(req, res) {
     try {
       const dbThoughtData = await Thought.findOneAndUpdate(
@@ -71,7 +71,7 @@ const thoughtController = {
       res.status(500).json(error);
     }
   },
-  // delete thought
+  // DELETE THOUGHT
   async deleteThought(req, res) {
     try {
       const dbThoughtData = await Thought.findOneAndRemove({
@@ -82,7 +82,7 @@ const thoughtController = {
         return res.status(404).json({ message: "No users match this ID" });
       }
 
-      // remove thought id from user's `thoughts` field
+      // REMOVE THOUGHT FROM RESPECTIVE THOUGHTS ARRAY
       const dbUserData = User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
         { $pull: { thoughts: req.params.thoughtId } },
@@ -92,7 +92,7 @@ const thoughtController = {
       if (!dbUserData) {
         return res
           .status(404)
-          .json({ message: "Can't Delete Note, No User matched this ID" });
+          .json({ message: "Can't Delete Thought, No User matched this ID" });
       }
 
       res.json({ message: "Thought successfully deleted!" });
@@ -102,7 +102,7 @@ const thoughtController = {
     }
   },
 
-  // add a reaction to a thought
+  // ADD REACTION TO SPECIFIC THOUGHT
   async addReaction(req, res) {
     try {
       const dbThoughtData = await Thought.findOneAndUpdate(
@@ -112,7 +112,7 @@ const thoughtController = {
       );
 
       if (!dbThoughtData) {
-        return res.status(404).json({ message: "No users match this ID" });
+        return res.status(404).json({ message: "No thought matches this ID" });
       }
 
       res.json(dbThoughtData);
@@ -121,7 +121,7 @@ const thoughtController = {
       res.status(500).json(error);
     }
   },
-  // remove reaction from a thought
+  // REMOVE REACTION FROM RESPECTIVE THOUGHT
   async removeReaction(req, res) {
     try {
       const dbThoughtData = await Thought.findOneAndUpdate(
